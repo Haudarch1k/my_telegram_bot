@@ -1,17 +1,18 @@
-import os
-import telebot
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters import Command
 
-TOKEN = os.environ.get('BOT_TOKEN')
-bot = telebot.TeleBot(TOKEN)
+TOKEN = "9196167319:AAEbxpi-L95b7yMnCMtlFTL1BGj76DVPspA"
 
-@bot.message_handler(commands=['start'])
-def handle_start(message):
-    args = message.text.split()
-    if len(args) > 1:
-        bot.send_message(message.chat.id, " Вы успешно зарегистрировались!")
-    else:
-        bot.send_message(message.chat.id, "Привет! Перейдите из приложения для регистрации.")
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
 
-if __name__ == '__main__':
-    print("Бот успешно запущен на Koyeb!")
-    bot.infinity_polling()
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    await message.answer(f"Привет, {message.from_user.full_name}!")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
